@@ -1,4 +1,5 @@
 name: Send Notification Email
+
 on:
   push:
     branches:
@@ -7,22 +8,23 @@ on:
 jobs:
   send_email:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
       
-      - name: Get Branch name
+      - name: Get Branch Name
         id: get_branch
         run: echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
       - name: Send Notification Email
-        uses: dawidd6/action-send-mail@v3
+        uses: dawidd6/action-send-mail@v6
         with:
-          server_address: smtp.outlook.com
+          server_address: smtp.gmail.com
           server_port: 587
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: 'Cambios subidos a rama ${{ env.branch_name }}'
-          body: 'Un nuevo push se ha realizado en el repositorio en la rama ${{ env.branch_name }}. Please check the details.'
+          username: ${{ secrets.SMTP_USERNAME }}     # tu Gmail
+          password: ${{ secrets.SMTP_PASSWORD }}     # App Password de Gmail
+          subject: "Cambios subidos a rama ${{ env.branch_name }}"
+          body: "Un nuevo push se ha realizado en la rama ${{ env.branch_name }}."
           to: ${{ secrets.EMAIL_TO }}
           from: ${{ secrets.SMTP_USERNAME }}
